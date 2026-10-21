@@ -1,12 +1,15 @@
-# Optional: deploy automatically on every push to main (GitHub).
-# One-time setup: in GitHub → Settings → Secrets → Actions, add
-#   FIREBASE_SERVICE_ACCOUNT  (JSON key of a Firebase service account with Hosting Admin)
-#   (project: gopartyweb-6a33b, set in .firebaserc)
+# Deploys the site to Firebase Hosting on every push to main (or run it by hand from the Actions tab).
+# One-time setup: run `npx firebase-tools init hosting:github` on your PC (see README),
+# which saves a Firebase service-account secret in this repo.
 name: Deploy to Firebase Hosting
 on:
   push:
     branches: [main]
   workflow_dispatch:
+permissions:
+  contents: write
+  checks: write
+  pull-requests: write
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,13 +17,34 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - run: npm install
-      - run: npm run build
-      - run: npm run verify
+      - name: Build
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee build.log
+      - name: Verify SEO links
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run verify 2>&1 | tee -a build.log
+      - name: Save build log to the ci-logs branch (only when something failed)
+        if: failure()
+        shell: bash
+        run: |
+          cp build.log /tmp/build.log
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git checkout --orphan ci-logs
+          git rm -rfq . >/dev/null
+          cp /tmp/build.log build.log
+          git add build.log
+          git commit -qm "Build log for ${GITHUB_SHA}"
+          git push -f origin ci-logs
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GOPARTYWEB_6A33B || secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: gopartyweb-6a33b
           channelId: live
