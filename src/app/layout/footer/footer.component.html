@@ -1,0 +1,31 @@
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <a [routerLink]="home().path" [attr.aria-label]="ui().homeLabel"><gp-logo /></a>
+      <p class="site-footer__tagline">{{ f().tagline }}</p>
+      <ul class="socials">
+        @for (s of f().socials; track s.icon) {
+          <li><a [href]="s.href" [attr.aria-label]="ui().socialPrefix + ' ' + s.label"><gp-icon [name]="s.icon" [size]="18" /></a></li>
+        }
+      </ul>
+    </div>
+    @for (col of columns(); track col.heading) {
+      <nav class="site-footer__col" [attr.aria-label]="col.heading">
+        <p class="site-footer__heading">{{ col.heading }}</p>
+        <ul>
+          @for (l of col.links; track l.label) {
+            <li><a [routerLink]="l.route.path" [fragment]="l.route.fragment">{{ l.label }}</a></li>
+          }
+        </ul>
+      </nav>
+    }
+  </div>
+  <div class="container site-footer__bottom">
+    <p>{{ f().copyright }}</p>
+    <ul class="site-footer__strip">
+      @for (s of f().strip; track s) {
+        <li><gp-icon name="shield-check" [size]="16" />{{ s }}</li>
+      }
+    </ul>
+  </div>
+</footer>

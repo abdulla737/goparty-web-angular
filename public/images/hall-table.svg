@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 640" width="560" height="640">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a0f4f"/><stop offset="1" stop-color="#4b1f8a"/></linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9dcff"/><stop offset="1" stop-color="#cdb6f5"/></linearGradient>
+    <radialGradient id="chand" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff3cf" stop-opacity="0.9"/><stop offset="1" stop-color="#fff3cf" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="560" height="640" rx="36" fill="url(#wall)"/>
+  <!-- arches -->
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="2">
+    <path d="M40 360 V170 a70 70 0 0 1 140 0 V360"/><path d="M210 360 V150 a70 70 0 0 1 140 0 V360"/><path d="M380 360 V170 a70 70 0 0 1 140 0 V360"/>
+  </g>
+  <!-- chandelier glow -->
+  <circle cx="280" cy="120" r="120" fill="url(#chand)"/>
+  <line x1="280" y1="0" x2="280" y2="90" stroke="#ffd27a" stroke-width="2"/>
+  <path d="M240 95 h80 l-12 26 h-56z" fill="#ffd27a"/>
+  <g fill="#fff3cf"><circle cx="250" cy="128" r="4"/><circle cx="280" cy="134" r="4"/><circle cx="310" cy="128" r="4"/></g>
+  <!-- floor -->
+  <path d="M0 400 H560 V604 a36 36 0 0 1 -36 36 H36 a36 36 0 0 1 -36 -36z" fill="url(#floor)"/>
+  <!-- table (perspective) -->
+  <path d="M110 380 H450 L520 520 H40z" fill="#ffffff"/>
+  <path d="M40 520 H520 V548 H40z" fill="#efe6ff"/>
+  <path d="M60 548 H500 L490 600 H70z" fill="#dccaff" opacity="0.6"/>
+  <!-- runner -->
+  <path d="M250 380 H310 L330 520 H230z" fill="#ffb627" opacity="0.85"/>
+  <!-- plates -->
+  <g fill="#f3ecff" stroke="#c9b5f2" stroke-width="2">
+    <ellipse cx="160" cy="410" rx="22" ry="9"/><ellipse cx="400" cy="410" rx="22" ry="9"/>
+    <ellipse cx="130" cy="460" rx="28" ry="11"/><ellipse cx="430" cy="460" rx="28" ry="11"/>
+    <ellipse cx="100" cy="505" rx="32" ry="12"/><ellipse cx="460" cy="505" rx="32" ry="12"/>
+  </g>
+  <!-- centerpieces -->
+  <g>
+    <rect x="272" y="350" width="16" height="40" rx="3" fill="#ffffff" opacity="0.8"/>
+    <circle cx="280" cy="340" r="22" fill="#ff5c7a"/><circle cx="266" cy="350" r="12" fill="#ff9db0"/><circle cx="296" cy="348" r="13" fill="#ffd27a"/>
+    <rect x="270" y="430" width="20" height="50" rx="3" fill="#ffffff" opacity="0.8"/>
+    <circle cx="280" cy="420" r="28" fill="#ff5c7a"/><circle cx="260" cy="432" r="15" fill="#ff9db0"/><circle cx="300" cy="430" r="16" fill="#ffd27a"/><circle cx="283" cy="400" r="10" fill="#c4a8ff"/>
+  </g>
+  <!-- candles -->
+  <g fill="#ffd27a"><rect x="215" y="400" width="6" height="22" rx="2"/><rect x="339" y="400" width="6" height="22" rx="2"/><rect x="200" y="470" width="7" height="26" rx="2"/><rect x="353" y="470" width="7" height="26" rx="2"/></g>
+  <g fill="#ffb627"><ellipse cx="218" cy="396" rx="3" ry="5"/><ellipse cx="342" cy="396" rx="3" ry="5"/><ellipse cx="203.5" cy="465" rx="3.5" ry="6"/><ellipse cx="356.5" cy="465" rx="3.5" ry="6"/></g>
+  <!-- chairs -->
+  <g fill="#6a2bf2">
+    <rect x="18" y="430" width="36" height="110" rx="10"/><rect x="506" y="430" width="36" height="110" rx="10"/>
+    <rect x="70" y="350" width="30" height="70" rx="8" opacity="0.85"/><rect x="460" y="350" width="30" height="70" rx="8" opacity="0.85"/>
+  </g>
+</svg>

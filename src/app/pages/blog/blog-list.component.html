@@ -1,0 +1,62 @@
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <p class="eyebrow">{{ t().eyebrow }}</p>
+    <h1>{{ t().h1 }}</h1>
+    <p class="page-hero__sub">{{ t().subtext }}</p>
+    <label class="blog-search">
+      <gp-icon name="search" [size]="18" />
+      <span class="visually-hidden">{{ t().searchLabel }}</span>
+      <input type="search" [placeholder]="t().searchPlaceholder" [value]="query()" (input)="onSearch($event)" />
+    </label>
+  </div>
+</section>
+
+<div class="container blog">
+  <div class="blog-cats" role="group" [attr.aria-label]="t().categoriesLabel">
+    <button type="button" class="blog-cat" [attr.aria-pressed]="category() === null" (click)="pick(null)">{{ t().all }}</button>
+    @for (c of categories(); track c) {
+      <button type="button" class="blog-cat" [attr.aria-pressed]="category() === c" (click)="pick(c)">{{ c }}</button>
+    }
+  </div>
+
+  @if (showFeatured() && featured(); as f) {
+    <a class="blog-featured" [routerLink]="f.link">
+      <img [src]="f.image" [alt]="f.imageAlt" width="720" height="440" fetchpriority="high" />
+      <div class="blog-featured__body">
+        <div class="blog-tags">
+          <span class="blog-tag blog-tag--gold">{{ t().featured }}</span>
+          <span class="blog-tag">{{ f.category }}</span>
+        </div>
+        <h2>{{ f.title }}</h2>
+        <p class="blog-featured__excerpt">{{ f.excerpt }}</p>
+        <p class="blog-meta">{{ f.author }} · {{ f.dateLabel }} · {{ f.readLabel }}</p>
+        <span class="link-arrow">{{ t().readArticle }} <gp-icon name="arrow-right" [size]="16" /></span>
+      </div>
+    </a>
+  }
+
+  <section class="blog-latest" aria-labelledby="blog-latest-title">
+    <h2 id="blog-latest-title" class="blog-latest__title">{{ category() ?? t().latest }}</h2>
+    @if (visible().length) {
+      <ul class="blog-grid">
+        @for (p of visible(); track p.slug) {
+          <li>
+            <a class="blog-card" [routerLink]="p.link">
+              <img [src]="p.image" [alt]="p.imageAlt" width="400" height="220" loading="lazy" />
+              <div class="blog-card__body">
+                <span class="blog-tag">{{ p.category }}</span>
+                <h3>{{ p.title }}</h3>
+                <p class="blog-card__excerpt">{{ p.excerpt }}</p>
+                <p class="blog-meta">{{ p.dateLabel }} · {{ p.readLabel }}</p>
+              </div>
+            </a>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="blog-empty">{{ t().noResults }}</p>
+    }
+  </section>
+</div>
+
+<gp-cta-banner />

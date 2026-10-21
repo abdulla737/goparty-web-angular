@@ -1,0 +1,11 @@
+{
+  "name": "goparty-telegram-bot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "GoParty customer support bot for Telegram (@GoPartyEventBot)",
+  "engines": { "node": ">=20.6" },
+  "scripts": {
+    "start": "node --env-file=.env bot.mjs"
+  }
+}

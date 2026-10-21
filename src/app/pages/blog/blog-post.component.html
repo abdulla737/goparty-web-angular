@@ -1,0 +1,103 @@
+@if (post(); as p) {
+  <article class="post">
+    <header class="container post__head">
+      <nav class="post__crumbs" aria-label="Breadcrumb">
+        <a [routerLink]="blogLink()">{{ t().blog }}</a>
+        <span aria-hidden="true">›</span>
+        <span>{{ p.category }}</span>
+      </nav>
+      <span class="blog-tag">{{ p.category }}</span>
+      <h1>{{ p.title }}</h1>
+      <p class="post__excerpt">{{ p.excerpt }}</p>
+      <div class="post__byline">
+        <span class="post__avatar" aria-hidden="true">GP</span>
+        <div>
+          <p class="post__author">{{ p.author }}</p>
+          <p class="blog-meta"><time [attr.datetime]="p.date">{{ p.dateLabel }}</time> · {{ p.readLabel }}</p>
+        </div>
+      </div>
+    </header>
+
+    <figure class="container post__hero">
+      <img [src]="p.image" [alt]="p.imageAlt" width="1104" height="460" fetchpriority="high" />
+    </figure>
+
+    <div class="container post__layout">
+      <div class="post__body">
+        @for (b of p.blocks; track $index) {
+          @if (b.kind === 'h2') {
+            <h2 [id]="b.id">{{ b.text }}</h2>
+          } @else if (b.kind === 'p') {
+            <p>{{ b.text }}</p>
+          } @else if (b.kind === 'list') {
+            <ul>
+              @for (item of b.items; track $index) { <li>{{ item }}</li> }
+            </ul>
+          } @else if (b.kind === 'tip') {
+            <aside class="post__tip">
+              <p class="post__tip-title">{{ b.title }}</p>
+              <p>{{ b.text }}</p>
+            </aside>
+          } @else if (b.kind === 'figure') {
+            <figure class="post__figure" [class.post__figure--phone]="b.phone">
+              <img [src]="b.src" [alt]="b.alt" loading="lazy" [class.phone-shot]="b.phone" />
+              @if (b.caption) { <figcaption>{{ b.caption }}</figcaption> }
+            </figure>
+          }
+        }
+
+        <div class="post__cta">
+          <div>
+            <p class="post__cta-title">{{ t().ctaTitle }}</p>
+            <p>{{ t().ctaText }}</p>
+          </div>
+          <a class="btn btn--marigold" [routerLink]="planLink().path" [fragment]="planLink().fragment">{{ t().ctaButton }}</a>
+        </div>
+
+        <div class="post__share">
+          <span>{{ t().share }}</span>
+          <a [href]="shareLinks().whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+          <a [href]="shareLinks().x" target="_blank" rel="noopener">X</a>
+          <a [href]="shareLinks().facebook" target="_blank" rel="noopener">Facebook</a>
+          <button type="button" (click)="copyLink()">{{ copied() ? t().linkCopied : t().copyLink }}</button>
+        </div>
+      </div>
+
+      <aside class="post__aside">
+        @if (p.toc.length) {
+          <nav class="post__toc" [attr.aria-label]="t().onThisPage">
+            <p class="post__toc-title">{{ t().onThisPage }}</p>
+            <ol>
+              @for (h of p.toc; track h.id) {
+                <li><a [routerLink]="[]" [fragment]="h.id">{{ h.h2 }}</a></li>
+              }
+            </ol>
+          </nav>
+        }
+        <a class="link-arrow post__back" [routerLink]="blogLink()"><gp-icon name="arrow-right" [size]="16" class="post__back-icon" />{{ t().backToBlog }}</a>
+      </aside>
+    </div>
+  </article>
+
+  @if (related().length) {
+    <section class="section section--tint" aria-labelledby="related-title">
+      <div class="container">
+        <h2 id="related-title" class="blog-latest__title">{{ t().related }}</h2>
+        <ul class="blog-grid">
+          @for (r of related(); track r.slug) {
+            <li>
+              <a class="blog-card" [routerLink]="r.link">
+                <img [src]="r.image" [alt]="r.imageAlt" width="400" height="220" loading="lazy" />
+                <div class="blog-card__body">
+                  <span class="blog-tag">{{ r.category }}</span>
+                  <h3>{{ r.title }}</h3>
+                  <p class="blog-meta">{{ r.dateLabel }} · {{ r.readLabel }}</p>
+                </div>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </section>
+  }
+}

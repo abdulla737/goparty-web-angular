@@ -1,0 +1,35 @@
+<section id="how-it-works" class="section section--night" aria-labelledby="how-title">
+  <div class="container">
+    <header class="section-head section-head--split">
+      <div>
+        <p class="eyebrow">{{ s().eyebrow }}</p>
+        <h2 id="how-title">{{ s().h2 }}</h2>
+        <p class="section-head__sub">{{ s().subtext }}</p>
+      </div>
+      <div #tablist class="tablist tablist--pill" role="tablist" [attr.aria-label]="i18n.ui().stepsForLabel" (keydown)="state.onKeydown($event, tablist)">
+        @for (g of groups(); track g.id; let i = $index) {
+          <button type="button" role="tab" class="tab"
+                  [id]="'how-tab-' + g.id" [attr.aria-controls]="'how-panel-' + g.id"
+                  [attr.aria-selected]="state.active() === i" [attr.tabindex]="state.active() === i ? 0 : -1"
+                  (click)="state.select(i)">{{ g.label }}</button>
+        }
+      </div>
+    </header>
+
+    @for (g of groups(); track g.id; let i = $index) {
+      <ol class="steps tabpanel" role="tabpanel" [id]="'how-panel-' + g.id"
+          [attr.aria-labelledby]="'how-tab-' + g.id" [class.is-active]="state.active() === i">
+        @for (step of g.steps; track step.title; let n = $index) {
+          <li class="step">
+            <div class="step__top">
+              <span class="step__num">{{ '0' + (n + 1) }}</span>
+              <span class="step__icon"><gp-icon [name]="step.icon" [size]="22" /></span>
+            </div>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.body }}</p>
+          </li>
+        }
+      </ol>
+    }
+  </div>
+</section>

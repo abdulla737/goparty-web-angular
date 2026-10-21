@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://goparty.ae/sitemap.xml

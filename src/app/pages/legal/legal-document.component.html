@@ -1,0 +1,64 @@
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <p class="eyebrow">{{ i18n.ui().legalEyebrow }}</p>
+    <h1>{{ doc().title }}</h1>
+    @if (doc().updated) { <p class="page-hero__meta">{{ doc().updated }}</p> }
+    @if (doc().intro) { <p class="page-hero__sub">{{ doc().intro }}</p> }
+    @if (doc().notice) { <p class="legal__notice"><gp-icon name="badge-check" [size]="18" />{{ doc().notice }}</p> }
+  </div>
+</section>
+
+<div class="container legal">
+  <aside class="legal__toc" [attr.aria-label]="i18n.ui().onThisPage">
+    <p class="legal__toc-title">{{ i18n.ui().onThisPage }}</p>
+    <ol>
+      @for (s of sections(); track s.id) {
+        <li><a [routerLink]="self()" [fragment]="s.id">{{ s.heading }}</a></li>
+      }
+    </ol>
+  </aside>
+
+  <article class="legal__body">
+    @for (s of sections(); track s.id) {
+      <section class="legal__section" [id]="s.id">
+        <h2><span class="legal__num">{{ s.num }}.</span> {{ s.heading }}</h2>
+        @for (b of s.blocks; track $index) {
+          @if (b.kind === 'p') {
+              <p><ng-container *ngTemplateOutlet="text; context: { $implicit: b.segments }" /></p>
+            } @else if (b.kind === 'list') {
+              <ul class="legal__list">
+                @for (item of b.items; track $index) { <li>{{ item }}</li> }
+              </ul>
+            } @else if (b.kind === 'clauses') {
+              @for (t of b.terms; track t.term) {
+                <p class="legal__clause"><strong>{{ t.term }}:</strong> <ng-container *ngTemplateOutlet="text; context: { $implicit: t.segments }" /></p>
+              }
+            } @else if (b.kind === 'definitions') {
+              <dl class="legal__defs">
+                @for (t of b.terms; track t.term) {
+                  <div><dt>{{ t.term }}</dt><dd><ng-container *ngTemplateOutlet="text; context: { $implicit: t.segments }" /></dd></div>
+                }
+              </dl>
+            } @else if (b.kind === 'see') {
+              <a class="link-arrow" [routerLink]="b.route.path" [fragment]="b.route.fragment">{{ b.label }} <gp-icon name="arrow-right" [size]="16" /></a>
+            }
+        }
+      </section>
+    }
+
+    <aside class="legal__help">
+      <span class="why-card__icon"><gp-icon name="bell-concierge" [size]="22" /></span>
+      <div>
+        <p class="legal__help-title">{{ i18n.ui().legalHelpTitle }}</p>
+        <p>{{ i18n.ui().legalHelpBody }} <a [routerLink]="contact()">{{ i18n.ui().legalHelpLink }}</a></p>
+      </div>
+    </aside>
+  </article>
+</div>
+
+<!-- Paragraph text with email addresses turned into mailto links -->
+<ng-template #text let-segments>
+  @for (seg of segments; track $index) {
+    @if (seg.email) { <a [href]="'mailto:' + seg.text" dir="ltr">{{ seg.text }}</a> } @else { {{ seg.text }} }
+  }
+</ng-template>

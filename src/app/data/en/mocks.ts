@@ -1,0 +1,71 @@
+/** Sample data shown inside the feature-tab mock-ups (English). */
+export const MOCKS = {
+  searchPlaceholder: 'Party decoration',
+  filters: ['Decoration', 'Dubai', 'AED 2k–5k', '4.5★ +'],
+  sellers: [
+    { initials: 'EE', name: 'Elegance Events Dubai', cat: 'Party Decoration · Downtown', rating: '4.9', price: 'AED 2,400' },
+    { initials: 'ML', name: 'Marina Lights & Sound', cat: 'DJ & Sound · Dubai Marina', rating: '4.8', price: 'AED 1,800' },
+    { initials: 'SC', name: 'Saffron Table Catering', cat: 'Catering · Jumeirah', rating: '5.0', price: 'AED 3,150' },
+  ],
+  plan: {
+    title: "Layla's 7th Birthday",
+    meta: 'Sat 14 Nov · Al Barsha',
+    sellers: '4 sellers',
+    budgetLabel: 'Budget used',
+    budgetUsed: 'AED 7,100',
+    budgetTotal: '/ 8,500',
+    items: [
+      { label: 'Balloon arch & backdrop', amount: 'AED 1,200', done: true },
+      { label: 'Catering for 40 guests', amount: 'AED 3,400', done: true },
+      { label: 'Magic show (45 min)', amount: 'AED 900', done: false },
+      { label: 'Event photographer', amount: 'AED 1,600', done: false },
+    ],
+  },
+  invite: {
+    kicker: "You're invited",
+    title: 'Omar turns 30',
+    meta: 'Fri 20 Nov · 8 PM · Yacht, Dubai Harbour',
+    going: 'Going',
+    maybe: 'Maybe',
+    pending: 'Pending',
+    share: 'Share on WhatsApp',
+  },
+  profile: {
+    name: 'Elegance Events Dubai',
+    meta: 'Party Decoration · ★ 4.9 (212 reviews)',
+    areasLabel: 'Service areas',
+    areas: [
+      { label: 'Dubai', on: true },
+      { label: 'Sharjah', on: true },
+      { label: 'Abu Dhabi', on: true },
+      { label: 'Ajman', on: false },
+    ],
+    calendarLabel: 'Availability · November',
+  },
+  dashboard: {
+    revenueLabel: 'Revenue this month',
+    revenue: 'AED 48,250',
+    orderTitle: 'New order · Gold Birthday Package',
+    orderMeta: 'Sat 14 Nov · AED 3,500 · awaiting confirmation',
+  },
+  packages: {
+    items: [
+      { name: 'Gold Birthday Package', meta: 'Balloons · Backdrop · Table styling', price: 'AED 3,500', tag: 'Best seller' },
+      { name: 'Silver Kids Party', meta: 'Balloons · Cake table · 2 hrs setup', price: 'AED 2,200', tag: '' },
+      { name: 'Wedding Kosha Setup', meta: 'Stage · Florals · Lighting', price: 'AED 9,800', tag: 'New' },
+    ],
+    create: '+ Create new package',
+  },
+  wallet: {
+    balanceLabel: 'Available balance',
+    balance: 'AED 12,400',
+    escrowLabel: 'In escrow',
+    escrow: 'AED 6,800',
+    paidLabel: 'Paid out (Oct)',
+    paid: 'AED 21,350',
+    payout: 'Payout to Emirates NBD ••42',
+    payoutAmount: 'AED 5,000',
+    held: 'Held in escrow · Order #GP-2291',
+    heldAmount: 'AED 3,500',
+  },
+};

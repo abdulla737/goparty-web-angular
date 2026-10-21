@@ -1,0 +1,117 @@
+<div class="mock" role="img" [attr.aria-label]="alt()">
+  <span class="mock__example">{{ i18n.ui().example }}</span>
+  @switch (kind()) {
+    @case ('browse') {
+      <div class="mock__bar">
+        <span class="mock__search"><gp-icon name="search" [size]="16" />{{ m().searchPlaceholder }}</span>
+      </div>
+      <ul class="chips">
+        @for (f of m().filters; track f; let first = $first) { <li [class.is-on]="first">{{ f }}</li> }
+      </ul>
+      <ul class="mock-list">
+        @for (s of m().sellers; track s.name) {
+          <li class="mock-seller">
+            <span class="mock-avatar">{{ s.initials }}</span>
+            <span class="mock-seller__main">
+              <b>{{ s.name }} <gp-icon name="badge-check" [size]="14" class="tick" /></b>
+              <small>{{ s.cat }}</small>
+            </span>
+            <span class="mock-seller__side"><small>★ {{ s.rating }}</small><b>{{ s.price }}</b></span>
+          </li>
+        }
+      </ul>
+    }
+    @case ('plan') {
+      <div class="mock-head">
+        <div><b>{{ m().plan.title }}</b><small>{{ m().plan.meta }}</small></div>
+        <span class="pill pill--violet">{{ m().plan.sellers }}</span>
+      </div>
+      <div class="budget">
+        <div class="budget__row"><small>{{ m().plan.budgetLabel }}</small><b>{{ m().plan.budgetUsed }} <span>{{ m().plan.budgetTotal }}</span></b></div>
+        <div class="meter"><span style="width: 84%"></span></div>
+      </div>
+      <ul class="mock-list">
+        @for (p of m().plan.items; track p.label) {
+          <li class="mock-line">
+            <span class="mock-check" [class.is-done]="p.done"><gp-icon name="check" [size]="12" /></span>
+            <span class="mock-line__label">{{ p.label }}</span>
+            <b>{{ p.amount }}</b>
+          </li>
+        }
+      </ul>
+    }
+    @case ('invitations') {
+      <div class="invite">
+        <p class="invite__kicker">{{ m().invite.kicker }}</p>
+        <p class="invite__title">{{ m().invite.title }}</p>
+        <p class="invite__meta">{{ m().invite.meta }}</p>
+      </div>
+      <div class="rsvp">
+        <div><b>32</b><small>{{ m().invite.going }}</small></div>
+        <div><b>6</b><small>{{ m().invite.maybe }}</small></div>
+        <div><b>4</b><small>{{ m().invite.pending }}</small></div>
+      </div>
+      <span class="btn btn--whatsapp btn--block"><gp-icon name="send" [size]="16" />{{ m().invite.share }}</span>
+    }
+    @case ('profile') {
+      <div class="profile-cover"></div>
+      <div class="profile">
+        <span class="mock-avatar mock-avatar--lg">{{ m().sellers[0].initials }}</span>
+        <div>
+          <b>{{ m().profile.name }} <gp-icon name="badge-check" [size]="16" class="tick" /></b>
+          <small>{{ m().profile.meta }}</small>
+        </div>
+      </div>
+      <p class="mock-label"><gp-icon name="map-pin" [size]="14" />{{ m().profile.areasLabel }}</p>
+      <ul class="chips">
+        @for (a of m().profile.areas; track a.label) { <li [class.is-on]="a.on">{{ a.label }}</li> }
+      </ul>
+      <p class="mock-label"><gp-icon name="calendar" [size]="14" />{{ m().profile.calendarLabel }}</p>
+      <ul class="cal">
+        @for (d of days; track d) { <li [class.is-booked]="booked.includes(d)">{{ d }}</li> }
+      </ul>
+    }
+    @case ('dashboard') {
+      <div class="mock-head">
+        <div><small>{{ m().dashboard.revenueLabel }}</small><b class="big-num">{{ m().dashboard.revenue }}</b></div>
+        <span class="pill pill--green">+18%</span>
+      </div>
+      <div class="bars" aria-hidden="true">
+        @for (b of bars; track $index) { <span [style.height.%]="b"></span> }
+      </div>
+      <div class="toast">
+        <span class="float__icon float__icon--violet"><gp-icon name="bell" [size]="16" /></span>
+        <div><b>{{ m().dashboard.orderTitle }}</b><small>{{ m().dashboard.orderMeta }}</small></div>
+      </div>
+    }
+    @case ('packages') {
+      <ul class="mock-list">
+        @for (p of m().packages.items; track p.name) {
+          <li class="pkg">
+            <span class="pkg__thumb"><gp-icon name="package" [size]="20" /></span>
+            <span class="pkg__main"><b>{{ p.name }}</b><small>{{ p.meta }}</small></span>
+            <span class="pkg__side">
+              @if (p.tag) { <span class="pill pill--marigold">{{ p.tag }}</span> }
+              <b>{{ p.price }}</b>
+            </span>
+          </li>
+        }
+      </ul>
+      <span class="btn btn--ghost btn--block">{{ m().packages.create }}</span>
+    }
+    @case ('wallet') {
+      <div class="wallet">
+        <small>{{ m().wallet.balanceLabel }}</small>
+        <b class="big-num">{{ m().wallet.balance }}</b>
+        <div class="wallet__split">
+          <span><small>{{ m().wallet.escrowLabel }}</small><b>{{ m().wallet.escrow }}</b></span>
+          <span><small>{{ m().wallet.paidLabel }}</small><b>{{ m().wallet.paid }}</b></span>
+        </div>
+      </div>
+      <ul class="mock-list">
+        <li class="mock-line"><span class="mock-check is-done"><gp-icon name="check" [size]="12" /></span><span class="mock-line__label">{{ m().wallet.payout }}</span><b>{{ m().wallet.payoutAmount }}</b></li>
+        <li class="mock-line"><span class="mock-check"><gp-icon name="lock" [size]="12" /></span><span class="mock-line__label">{{ m().wallet.held }}</span><b>{{ m().wallet.heldAmount }}</b></li>
+      </ul>
+    }
+  }
+</div>

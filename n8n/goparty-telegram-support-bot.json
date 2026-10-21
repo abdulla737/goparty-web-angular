@@ -1,0 +1,145 @@
+{
+  "name": "GoParty Telegram Support Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "id": "ef760357-72fa-4168-8920-78e00f41d8d2",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "29453708-d86f-4646-979b-a45eadb67336",
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "GoParty Support Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "af1b6015-3c3c-4d6e-bd22-29f178b342fa",
+              "name": "botToken",
+              "value": "PASTE_YOUR_BOT_TOKEN_HERE",
+              "type": "string"
+            },
+            {
+              "id": "710732ad-91de-4c1a-8f2c-26eedce5de36",
+              "name": "supportChatId",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "ed17c876-85ba-4b0f-8d18-3821eb6acbea",
+              "name": "siteUrl",
+              "value": "https://goparty.ae",
+              "type": "string"
+            },
+            {
+              "id": "73d8d8c2-5d3f-423e-bbfd-4743aae1888e",
+              "name": "supportEmail",
+              "value": "Help@goparty.ae",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8b0f4346-e5dc-49a0-a0de-a40a9e136838",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ],
+      "notes": "botToken: your @GoPartyEventBot token from @BotFather.\nsupportChatId: your support group's ID (send /id in the group). Leave empty until you have it.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// GoParty support bot — logic for the n8n \"Bot logic\" Code node.\n// Input: the Telegram update from the \"Telegram Trigger\" node and settings from the \"Config\" node.\n// Output: one item per Telegram API call: { method, body }. The \"Call Telegram\" node sends them in order.\n\nconst update = $('Telegram Trigger').first().json;\nconst cfg = $('Config').first().json;\nconst SUPPORT = cfg.supportChatId ? Number(cfg.supportChatId) : null;\nconst SITE = String(cfg.siteUrl || 'https://goparty.ae').replace(/\\/$/, '');\nconst EMAIL = cfg.supportEmail || 'Help@goparty.ae';\n\n// Remembers each customer's chosen language between executions (active workflow only).\nconst store = $getWorkflowStaticData('global');\nstore.lang = store.lang || {};\n\nconst TEXT = {\n  en: {\n    welcome: (n) => `Hi ${n}! 👋 Welcome to GoParty support.\\n\\nGoParty is the UAE's verified party and event marketplace. Ask us anything about bookings, payments, invitations or selling on GoParty.\\n\\nChoose an option below, or just type your question and our team will reply here.`,\n    faq: '❓ FAQs', talk: '💬 Talk to support', website: '🌐 Visit GoParty', help: '📖 Help Center', lang: 'العربية 🇦🇪', back: '⬅️ Back',\n    faqTitle: 'Frequently asked questions. Tap a question to see the answer:',\n    talkPrompt: 'Type your message below and our support team will reply here as soon as possible. You can also send photos or screenshots.',\n    received: '✅ Thanks! Your message reached our support team. We will reply here as soon as possible.',\n    offline: `Our live chat is not available right now. Please email us at ${EMAIL} and we will get back to you.`,\n    agent: '💬 GoParty Support:',\n    helpCmd: `Send your question here and our team will reply.\\n\\nCommands:\\n/start – main menu\\n/faq – frequently asked questions\\n/language – switch to Arabic\\n\\nEmail: ${EMAIL}`,\n    faqs: [\n      ['How do escrow payments work?', 'When you book, you pay through GoParty and the money is held securely. It is released to the seller only once your party is confirmed, so you never pay a seller directly.'],\n      ['How are sellers verified?', 'Every seller passes identity, trade licence and quality checks before their profile goes live.'],\n      ['Can I get a refund?', 'If the seller cancels, you get a full refund and may be entitled to compensation. If you cancel, the refund depends on the published cancellation policy and the costs already incurred. A defective service can be performed again or refunded.'],\n      ['My guests did not get my WhatsApp invitation', 'WhatsApp restrictions can sometimes block delivery. GoParty may then send the invitation by SMS or another channel. Check the guest’s number, and message us here if it still does not arrive.'],\n      ['How do I become a seller?', 'Choose “Join as a Seller” on the website, create your company profile and pass verification. Then publish your packages and start receiving bookings.'],\n    ],\n  },\n  ar: {\n    welcome: (n) => `مرحباً ${n}! 👋 أهلاً بك في دعم GoParty.\\n\\nGoParty هي منصّة الحفلات والفعاليات الموثّقة في الإمارات. اسألنا عن الحجوزات أو المدفوعات أو الدعوات أو البيع على GoParty.\\n\\nاختر من الخيارات أدناه، أو اكتب سؤالك مباشرة وسيرد عليك فريقنا هنا.`,\n    faq: '❓ الأسئلة الشائعة', talk: '💬 تحدّث مع الدعم', website: '🌐 زيارة GoParty', help: '📖 مركز المساعدة', lang: 'English 🇬🇧', back: '⬅️ رجوع',\n    faqTitle: 'الأسئلة الشائعة. اضغط على السؤال لعرض الإجابة:',\n    talkPrompt: 'اكتب رسالتك أدناه وسيرد عليك فريق الدعم هنا في أسرع وقت. يمكنك أيضاً إرسال صور أو لقطات شاشة.',\n    received: '✅ شكراً! وصلت رسالتك إلى فريق الدعم، وسنرد عليك هنا في أسرع وقت ممكن.',\n    offline: `المحادثة المباشرة غير متاحة حالياً. يرجى مراسلتنا على ${EMAIL} وسنعود إليك.`,\n    agent: '💬 دعم GoParty:',\n    helpCmd: `أرسل سؤالك هنا وسيرد عليك فريقنا.\\n\\nالأوامر:\\n/start – القائمة الرئيسية\\n/faq – الأسئلة الشائعة\\n/language – التبديل إلى الإنجليزية\\n\\nالبريد الإلكتروني: ${EMAIL}`,\n    faqs: [\n      ['كيف تعمل مدفوعات الضمان؟', 'عند الحجز تدفع عبر GoParty وتُحفظ الأموال بأمان، ولا تُحوَّل إلى البائع إلا بعد تأكيد حفلتك، لذلك لا تدفع للبائع مباشرة أبداً.'],\n      ['كيف يتم التحقق من البائعين؟', 'يجتاز كل بائع فحص الهوية والرخصة التجارية والجودة قبل ظهور ملفه.'],\n      ['هل يمكنني استرداد المبلغ؟', 'إذا ألغى البائع تحصل على استرداد كامل وقد يحق لك التعويض. وإذا ألغيت أنت، يتوقف الاسترداد على سياسة الإلغاء المنشورة والتكاليف التي تم تكبّدها. ويجوز إعادة تنفيذ الخدمة المعيبة أو استرداد قيمتها.'],\n      ['لم تصل دعوة واتساب إلى ضيوفي', 'قد تمنع قيود واتساب أحياناً وصول الدعوة، وعندها قد ترسلها GoParty عبر رسالة نصية أو قناة أخرى. تحقّق من رقم الضيف، وراسلنا هنا إذا لم تصل.'],\n      ['كيف أصبح بائعاً؟', 'اختر «انضم كبائع» على الموقع، وأنشئ ملف شركتك واجتز التحقق، ثم انشر باقاتك وابدأ في استقبال الحجوزات.'],\n    ],\n  },\n};\n\nconst calls = [];\nconst call = (method, body) => calls.push({ json: { method, body } });\n\nconst langOf = (u) => store.lang[u?.id] || (String(u?.language_code || '').startsWith('ar') ? 'ar' : 'en');\nconst link = (l, path) => `${SITE}${l === 'ar' ? '/ar' : ''}${path}`;\nconst mainMenu = (l) => ({\n  inline_keyboard: [\n    [{ text: TEXT[l].faq, callback_data: 'faq' }, { text: TEXT[l].talk, callback_data: 'talk' }],\n    [{ text: TEXT[l].website, url: link(l, '/') }, { text: TEXT[l].help, url: link(l, '/contact-us/#help-center') }],\n    [{ text: TEXT[l].lang, callback_data: `lang:${l === 'ar' ? 'en' : 'ar'}` }],\n  ],\n});\nconst faqMenu = (l) => ({\n  inline_keyboard: [...TEXT[l].faqs.map(([q], i) => [{ text: q, callback_data: `faq:${i}` }]), [{ text: TEXT[l].back, callback_data: 'menu' }]],\n});\nconst name = (u) => [u.first_name, u.last_name].filter(Boolean).join(' ') || 'Customer';\n// The #id tag lets agents' replies find the customer without any database.\nconst header = (u) => `📩 ${name(u)}${u.username ? ` (@${u.username})` : ''}\\n#id${u.id} · ${langOf(u).toUpperCase()}\\nReply to this message to answer the customer.`;\n\nconst msg = update.message;\nconst cb = update.callback_query;\n\nif (msg) {\n  const text = (msg.text || '').trim();\n  const cmd = text.startsWith('/') ? text.split(/[\\s@]/)[0].toLowerCase() : '';\n\n  if (cmd === '/id') {\n    call('sendMessage', { chat_id: msg.chat.id, text: `Chat ID: ${msg.chat.id}` });\n  } else if (SUPPORT && msg.chat.id === SUPPORT) {\n    // Support group: send agent replies back to the customer.\n    const manual = /^\\/reply(?:@\\w+)?\\s+(\\d+)\\s+([\\s\\S]+)/.exec(text);\n    let customer = manual ? Number(manual[1]) : null;\n    if (!customer && msg.reply_to_message && !cmd) {\n      const m = /#id(\\d+)/.exec(msg.reply_to_message.text || msg.reply_to_message.caption || '');\n      if (m) customer = Number(m[1]);\n    }\n    if (customer) {\n      const l = store.lang[customer] || 'en';\n      if (manual) call('sendMessage', { chat_id: customer, text: `${TEXT[l].agent}\\n${manual[2]}` });\n      else if (msg.text) call('sendMessage', { chat_id: customer, text: `${TEXT[l].agent}\\n${msg.text}` });\n      else call('copyMessage', { chat_id: customer, from_chat_id: msg.chat.id, message_id: msg.message_id });\n    }\n  } else if (msg.chat.type === 'private') {\n    const u = msg.from;\n    let l = langOf(u);\n    if (cmd === '/language') {\n      l = l === 'ar' ? 'en' : 'ar';\n      store.lang[u.id] = l;\n    }\n    if (cmd === '/faq') {\n      call('sendMessage', { chat_id: msg.chat.id, text: TEXT[l].faqTitle, reply_markup: faqMenu(l) });\n    } else if (cmd === '/help') {\n      call('sendMessage', { chat_id: msg.chat.id, text: TEXT[l].helpCmd });\n    } else if (cmd) {\n      // /start, /menu, /language and any other command show the main menu\n      call('sendMessage', { chat_id: msg.chat.id, text: TEXT[l].welcome(u.first_name || ''), reply_markup: mainMenu(l) });\n    } else if (!SUPPORT) {\n      call('sendMessage', { chat_id: msg.chat.id, text: TEXT[l].offline });\n    } else {\n      // Customer message -> support group, with the #id header in the same message\n      if (msg.text) {\n        call('sendMessage', { chat_id: SUPPORT, text: `${header(u)}\\n\\n${msg.text}` });\n      } else if (msg.sticker) {\n        call('sendMessage', { chat_id: SUPPORT, text: header(u) });\n        call('copyMessage', { chat_id: SUPPORT, from_chat_id: msg.chat.id, message_id: msg.message_id });\n      } else {\n        const caption = `${header(u)}${msg.caption ? `\\n\\n${msg.caption}` : ''}`.slice(0, 1024);\n        call('copyMessage', { chat_id: SUPPORT, from_chat_id: msg.chat.id, message_id: msg.message_id, caption });\n      }\n      call('sendMessage', { chat_id: msg.chat.id, text: TEXT[l].received });\n    }\n  }\n} else if (cb) {\n  const chatId = cb.message.chat.id;\n  const messageId = cb.message.message_id;\n  const data = cb.data || '';\n  call('answerCallbackQuery', { callback_query_id: cb.id });\n  if (data.startsWith('lang:')) store.lang[cb.from.id] = data.slice(5) === 'ar' ? 'ar' : 'en';\n  const l = langOf(cb.from);\n  const t = TEXT[l];\n  if (data === 'menu' || data.startsWith('lang:')) {\n    call('editMessageText', { chat_id: chatId, message_id: messageId, text: t.welcome(cb.from.first_name || ''), reply_markup: mainMenu(l) });\n  } else if (data === 'faq') {\n    call('editMessageText', { chat_id: chatId, message_id: messageId, text: t.faqTitle, reply_markup: faqMenu(l) });\n  } else if (data.startsWith('faq:')) {\n    const item = t.faqs[Number(data.slice(4))];\n    if (item) {\n      call('editMessageText', {\n        chat_id: chatId,\n        message_id: messageId,\n        text: `${item[0]}\\n\\n${item[1]}`,\n        reply_markup: { inline_keyboard: [[{ text: t.talk, callback_data: 'talk' }], [{ text: t.back, callback_data: 'faq' }]] },\n      });\n    }\n  } else if (data === 'talk') {\n    call('sendMessage', { chat_id: chatId, text: SUPPORT ? t.talkPrompt : t.offline });\n  }\n}\n\nreturn calls;\n"
+      },
+      "id": "409c104e-3565-4ec2-ab8c-34e64ed615da",
+      "name": "Bot logic",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "notes": "Greeting, menu, FAQ, English/Arabic, customer → support group, agent reply → customer. Edit texts in TEXT.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $('Config').first().json.botToken }}/{{ $json.method }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {}
+      },
+      "id": "f6d2c59d-5bce-4987-a9d0-311a22dc8625",
+      "name": "Call Telegram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Bot logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bot logic": {
+      "main": [
+        [
+          {
+            "node": "Call Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

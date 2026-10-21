@@ -1,0 +1,26 @@
+# Optional: deploy automatically on every push to main (GitHub).
+# One-time setup: in GitHub → Settings → Secrets → Actions, add
+#   FIREBASE_SERVICE_ACCOUNT  (JSON key of a Firebase service account with Hosting Admin)
+#   (project: gopartyweb-6a33b, set in .firebaserc)
+name: Deploy to Firebase Hosting
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run build
+      - run: npm run verify
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: gopartyweb-6a33b
+          channelId: live

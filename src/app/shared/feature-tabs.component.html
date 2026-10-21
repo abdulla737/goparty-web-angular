@@ -1,0 +1,66 @@
+<div class="ftabs">
+  <div #tablist class="tablist" role="tablist" [attr.aria-label]="label()" (keydown)="state.onKeydown($event, tablist)">
+    @for (t of tabs(); track t.id; let i = $index) {
+      <button type="button" role="tab" class="tab"
+              [id]="idPrefix() + '-tab-' + t.id"
+              [attr.aria-controls]="idPrefix() + '-panel-' + t.id"
+              [attr.aria-selected]="state.active() === i"
+              [attr.tabindex]="state.active() === i ? 0 : -1"
+              (click)="state.select(i)">
+        <gp-icon [name]="t.icon" [size]="18" />{{ t.tab }}
+      </button>
+    }
+  </div>
+
+  @for (t of tabs(); track t.id; let i = $index) {
+    <div class="tabpanel" role="tabpanel"
+         [id]="idPrefix() + '-panel-' + t.id"
+         [attr.aria-labelledby]="idPrefix() + '-tab-' + t.id"
+         [class.is-active]="state.active() === i">
+      <div class="tabpanel__copy">
+        <h3>{{ t.h3 }}</h3>
+        <p>{{ t.body }}</p>
+        <ul class="checklist">
+          @for (b of t.bullets; track b) {
+            <li><span class="checklist__tick"><gp-icon name="check" [size]="14" /></span>{{ b }}</li>
+          }
+        </ul>
+        @let l = link(t.href);
+        <a class="link-arrow" [routerLink]="l.path" [fragment]="l.fragment">{{ t.link }} <gp-icon name="arrow-right" [size]="16" /></a>
+      </div>
+      @if (t.screenshot) {
+        <figure class="tabpanel__visual tabpanel__visual--phone">
+          <img class="phone-shot" [src]="t.screenshot" [alt]="t.visualAlt" width="540" height="1173" loading="lazy" />
+        </figure>
+      } @else {
+        <gp-tab-visual class="tabpanel__visual" [kind]="t.id" [alt]="t.visualAlt" />
+      }
+
+      @if (t.steps) {
+        <div class="app-steps" [id]="t.id + '-steps'">
+          <div class="app-steps__head">
+            <p class="eyebrow">{{ t.steps.title }}</p>
+            <h4 class="app-steps__heading">{{ t.steps.heading }}</h4>
+          </div>
+          <ol class="app-steps__list" [class.app-steps__list--many]="t.steps.items.length === 4 || t.steps.items.length === 5"
+              [class.app-steps__list--six]="t.steps.items.length === 6">
+            @for (s of t.steps.items; track s.image; let n = $index) {
+              <li class="app-step">
+                <figure class="app-step__shot">
+                  <img class="phone-shot" [src]="s.image" [alt]="s.alt" width="540" height="1173" loading="lazy" />
+                </figure>
+                <div class="app-step__text">
+                  <span class="app-step__num">{{ n + 1 }}</span>
+                  <div>
+                    <p class="app-step__title">{{ s.title }}</p>
+                    <p class="app-step__body">{{ s.body }}</p>
+                  </div>
+                </div>
+              </li>
+            }
+          </ol>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,52 @@
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="badge"><gp-icon name="badge-check" [size]="16" />{{ h().badge }}</p>
+      <h1 id="hero-title" class="hero__title">
+        <span class="hero__lead">{{ h().h1Lead }}</span>
+        {{ h().h1Rest }}
+      </h1>
+      <p class="hero__sub">{{ h().subtext }}</p>
+      <div class="btn-row">
+        <a class="btn btn--primary btn--lg" [routerLink]="plan().path" [fragment]="plan().fragment">{{ h().primaryCta }}<gp-icon name="arrow-right" [size]="18" /></a>
+        <a class="btn btn--ghost btn--lg" [routerLink]="how().path" [fragment]="how().fragment">{{ h().secondaryCta }}</a>
+      </div>
+      <div class="rating">
+        <ul class="avatars" aria-hidden="true">
+          @for (a of h().avatars; track a) { <li>{{ a }}</li> }
+        </ul>
+        <div>
+          <span class="stars" aria-hidden="true">
+            @for (s of stars; track s) { <gp-icon name="star" [size]="14" /> }
+          </span>
+          <p class="rating__text">{{ h().rating }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__visual">
+      <img class="hero__img" src="images/hero-balloons.svg" [alt]="h().imageAlt" width="560" height="620" fetchpriority="high" />
+
+      <div class="float float--tr">
+        <span class="float__icon float__icon--violet"><gp-icon name="badge-check" [size]="18" /></span>
+        <div>
+          <p class="float__title">{{ h().cards.verified.title }}</p>
+          <p class="float__meta">{{ h().cards.verified.seller }}</p>
+          <ul class="chips chips--tiny">
+            @for (t of h().cards.verified.tags; track t) { <li>{{ t }}</li> }
+          </ul>
+        </div>
+      </div>
+
+      <div class="float float--bl">
+        <span class="float__icon float__icon--green"><gp-icon name="lock" [size]="18" /></span>
+        <p class="float__title">{{ h().cards.escrow }}</p>
+      </div>
+
+      <div class="float float--br">
+        <span class="float__icon float__icon--marigold"><gp-icon name="popper" [size]="18" /></span>
+        <p class="float__title">{{ h().cards.booked }}</p>
+      </div>
+    </div>
+  </div>
+</section>

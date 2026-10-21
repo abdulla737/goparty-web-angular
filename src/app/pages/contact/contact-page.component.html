@@ -1,0 +1,110 @@
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <p class="eyebrow">{{ page().eyebrow }}</p>
+    <h1>{{ page().h1 }}</h1>
+    <p class="page-hero__sub">{{ page().subtext }}</p>
+  </div>
+</section>
+
+<section class="section section--flush-top" [attr.aria-label]="form().waysLabel">
+  <div class="container contact">
+    <div class="contact__info">
+      <div class="contact-email">
+        <p class="contact-email__label">{{ form().emailSupport }}</p>
+        <a class="contact-email__address" [href]="'mailto:' + email" dir="ltr">{{ email }}</a>
+        <button type="button" class="btn btn--ghost btn--sm" (click)="copyEmail()">
+          <gp-icon [name]="copied() ? 'check' : 'send'" [size]="16" />{{ copied() ? form().copied : form().copy }}
+        </button>
+      </div>
+
+      <div class="contact-telegram">
+        <span class="contact-telegram__icon"><gp-icon name="telegram" [size]="24" /></span>
+        <div class="contact-telegram__text">
+          <p class="contact-telegram__title">{{ form().telegramLabel }}</p>
+          <p>{{ form().telegramBody }}</p>
+          <p class="contact-telegram__handle" dir="ltr">&#64;{{ telegram.username }}</p>
+        </div>
+        <a class="btn btn--telegram btn--sm" [href]="telegram.url" target="_blank" rel="noopener">{{ form().telegramButton }}</a>
+      </div>
+
+      <ul class="contact__options">
+        @for (o of c().CONTACT_OPTIONS; track o.icon) {
+          <li class="why-card">
+            <span class="why-card__icon"><gp-icon [name]="o.icon" [size]="22" /></span>
+            <p class="contact__option-title">{{ o.title }}</p>
+            <p>{{ o.body }}</p>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <form class="contact-form" (submit)="send($event)" novalidate aria-labelledby="form-title">
+      <h2 id="form-title" class="contact-form__title">{{ form().title }}</h2>
+      <div class="field-row">
+        <div class="field">
+          <label for="cf-name">{{ form().name }}</label>
+          <input id="cf-name" name="name" type="text" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for="cf-email">{{ form().email }}</label>
+          <input id="cf-email" name="email" type="email" autocomplete="email" dir="ltr" required />
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="cf-role">{{ form().role }}</label>
+          <select id="cf-role" name="role">
+            @for (r of form().roles; track r) { <option>{{ r }}</option> }
+          </select>
+        </div>
+        <div class="field">
+          <label for="cf-topic">{{ form().topic }}</label>
+          <select id="cf-topic" name="topic">
+            @for (t of c().CONTACT_TOPICS; track t) { <option>{{ t }}</option> }
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="cf-message">{{ form().message }}</label>
+        <textarea id="cf-message" name="message" rows="6" required [placeholder]="form().messagePlaceholder"></textarea>
+      </div>
+      @if (error()) { <p class="form-error" role="alert">{{ error() }}</p> }
+      @if (opened()) { <p class="form-note" role="status">{{ withEmail(form().opened) }}</p> }
+      <button type="submit" class="btn btn--primary btn--lg">{{ form().submit }}<gp-icon name="arrow-right" [size]="18" /></button>
+      <p class="form-hint">{{ withEmail(form().hint) }}</p>
+    </form>
+  </div>
+</section>
+
+<section id="help-center" class="section section--tint" aria-labelledby="help-title">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow">{{ c().HELP_CENTER.eyebrow }}</p>
+      <h2 id="help-title">{{ c().HELP_CENTER.h2 }}</h2>
+      <p class="section-head__sub">{{ c().HELP_CENTER.subtext }}</p>
+    </header>
+    <div class="faq">
+      @for (f of faqs(); track f.q; let first = $first) {
+        <details class="faq__item" [open]="first">
+          <summary><h3>{{ f.q }}</h3><gp-icon name="arrow-right" [size]="18" class="faq__chev" /></summary>
+          <div class="faq__answer">
+            <p>{{ f.a }}</p>
+            @if (f.link && f.route) {
+              <a class="link-arrow" [routerLink]="f.route.path" [fragment]="f.route.fragment">{{ f.link.label }} <gp-icon name="arrow-right" [size]="16" /></a>
+            }
+          </div>
+        </details>
+      }
+    </div>
+    <div class="help-more">
+      <div>
+        <p class="help-more__title">{{ form().helpMore }}</p>
+        <p>{{ form().helpMoreBody }}</p>
+      </div>
+      <div class="help-more__actions">
+        <a class="btn btn--telegram" [href]="telegram.url" target="_blank" rel="noopener"><gp-icon name="telegram" [size]="18" />{{ form().telegramButton }}</a>
+        <a class="btn btn--ghost" [href]="'mailto:' + email">{{ email }}</a>
+      </div>
+    </div>
+  </div>
+</section>
