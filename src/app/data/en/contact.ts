@@ -46,6 +46,7 @@ export const HELP_CENTER = {
   eyebrow: 'Help Center',
   h2: 'Frequently Asked Questions',
   subtext: "Quick answers to the questions we hear most. Can't find yours? Email our support team.",
+  allFaqs: 'See all FAQs',
 };
 
 export const FAQS: { q: string; a: string; link?: { label: string; href: string } }[] = [

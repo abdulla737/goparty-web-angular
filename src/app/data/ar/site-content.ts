@@ -382,6 +382,7 @@ export const FOOTER: typeof EN.FOOTER = {
       heading: 'الدعم',
       links: [
         { label: 'مركز المساعدة', href: LINKS.helpCenter },
+        { label: 'الأسئلة الشائعة', href: LINKS.faq },
         { label: 'الأمان والثقة', href: '/#why-goparty' },
         { label: 'شروط الخدمة', href: LINKS.terms },
         { label: 'سياسة الخصوصية', href: LINKS.privacy },

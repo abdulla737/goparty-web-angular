@@ -23,6 +23,7 @@ export class ContactPageComponent {
   protected readonly faqs = computed(() =>
     this.c().FAQS.map((f) => ({ ...f, route: f.link ? this.i18n.route(f.link.href) : null })),
   );
+  protected readonly faqLink = computed(() => this.i18n.localize(LINKS.faq));
   protected readonly email = SUPPORT_EMAIL;
   protected readonly telegram = TELEGRAM_BOT;
 

@@ -1,0 +1,70 @@
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <p class="eyebrow">{{ t().eyebrow }}</p>
+    <h1>{{ t().h1 }}</h1>
+    <p class="page-hero__sub">{{ t().subtext }}</p>
+    <div class="faq-search" role="search">
+      <label class="visually-hidden" for="faq-search">{{ t().searchLabel }}</label>
+      <gp-icon name="search" [size]="20" class="faq-search__icon" />
+      <input #search id="faq-search" type="search" autocomplete="off" [placeholder]="t().searchPlaceholder" (input)="onSearch($event)" />
+      @if (searching()) {
+        <button type="button" class="faq-search__clear" [attr.aria-label]="t().clear" (click)="clear(search)"><gp-icon name="close" [size]="18" /></button>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section section--flush-top">
+  <div class="container faq-page">
+    <nav class="faq-topics" [attr.aria-label]="t().topicsLabel">
+      @for (cat of categories(); track cat.id) {
+        <a class="faq-topic" [routerLink]="pageLink()" [fragment]="cat.id">
+          <gp-icon [name]="cat.icon" [size]="18" />{{ cat.title }}<span class="faq-topic__count">{{ cat.items.length }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="faq-page__main">
+      @if (searching()) {
+        <p class="faq-page__results" role="status">{{ resultsText() }}</p>
+      }
+
+      @for (cat of visible(); track cat.id) {
+        <section class="faq-group" [id]="cat.id" [attr.aria-labelledby]="cat.id + '-title'">
+          <h2 class="faq-group__title" [id]="cat.id + '-title'">
+            <span class="faq-group__icon"><gp-icon [name]="cat.icon" [size]="20" /></span>{{ cat.title }}
+          </h2>
+          <div class="faq">
+            @for (item of cat.items; track item.id) {
+              <details class="faq__item" [id]="item.id" [open]="searching() || openId() === item.id">
+                <summary><h3>{{ item.q }}</h3><gp-icon name="arrow-right" [size]="18" class="faq__chev" /></summary>
+                <div class="faq__answer">
+                  @for (p of item.a; track $index) { <p>{{ p }}</p> }
+                  @if (item.list) {
+                    <ul class="faq__list">
+                      @for (l of item.list; track l.term) { <li><strong>{{ l.term }}:</strong> {{ l.text }}</li> }
+                    </ul>
+                  }
+                </div>
+              </details>
+            }
+          </div>
+        </section>
+      } @empty {
+        <p class="faq-page__empty">{{ t().noResults }}</p>
+      }
+
+      <div class="help-more">
+        <div>
+          <p class="help-more__title">{{ t().helpTitle }}</p>
+          <p>{{ t().helpBody }}</p>
+          <p class="faq-page__updated">{{ t().updated }}</p>
+        </div>
+        <div class="help-more__actions">
+          <a class="btn btn--primary" [routerLink]="contactLink()">{{ t().contactButton }}</a>
+          <a class="btn btn--ghost" [href]="'mailto:' + email" dir="ltr">{{ email }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

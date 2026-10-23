@@ -9,6 +9,7 @@ export const LINKS = {
   howItWorks: '/#how-it-works',
   contact: '/contact-us',
   helpCenter: '/contact-us#help-center',
+  faq: '/faq',
   terms: '/termsOfServiceEn',
   privacy: '/privacyPolicyEn',
   refund: '/refundPolicyEn',

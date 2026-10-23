@@ -6,6 +6,7 @@ import { PrivacyPageComponent } from './pages/legal/privacy-page.component';
 import { RefundPageComponent } from './pages/legal/refund-page.component';
 import { BlogListComponent } from './pages/blog/blog-list.component';
 import { BlogPostComponent } from './pages/blog/blog-post.component';
+import { FaqPageComponent } from './pages/faq/faq-page.component';
 import { Lang } from './i18n/content';
 import { langGuard } from './i18n/lang.guard';
 
@@ -13,6 +14,7 @@ import { langGuard } from './i18n/lang.guard';
 const pages = (lang: Lang): Routes => [
   { path: '', pathMatch: 'full', component: HomePageComponent, data: { lang }, canActivate: [langGuard] },
   { path: 'contact-us', component: ContactPageComponent, data: { lang }, canActivate: [langGuard] },
+  { path: 'faq', component: FaqPageComponent, data: { lang }, canActivate: [langGuard] },
   // Keeps the URLs already used on goparty.ae.
   { path: 'termsOfServiceEn', component: TermsPageComponent, data: { lang }, canActivate: [langGuard] },
   { path: 'privacyPolicyEn', component: PrivacyPageComponent, data: { lang }, canActivate: [langGuard] },

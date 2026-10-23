@@ -33,6 +33,7 @@ export const HELP_CENTER: typeof EN.HELP_CENTER = {
   eyebrow: 'مركز المساعدة',
   h2: 'الأسئلة الشائعة',
   subtext: 'إجابات سريعة لأكثر الأسئلة تكراراً. لم تجد سؤالك؟ راسل فريق الدعم.',
+  allFaqs: 'عرض جميع الأسئلة الشائعة',
 };
 
 export const FAQS: typeof EN.FAQS = [

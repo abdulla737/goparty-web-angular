@@ -18,6 +18,8 @@ import { REFUND as arRefund } from '../data/ar/refund';
 import { LegalDocument } from '../data/legal';
 import * as enBlog from '../data/en/blog';
 import * as arBlog from '../data/ar/blog';
+import * as enFaq from '../data/en/faq';
+import * as arFaq from '../data/ar/faq';
 
 export type Lang = 'en' | 'ar';
 export const LANGS: Lang[] = ['en', 'ar'];
@@ -31,9 +33,10 @@ export interface Content {
   privacy: LegalDocument;
   refund: LegalDocument;
   blog: typeof enBlog;
+  faq: typeof enFaq;
 }
 
-const en: Content = { site: enSite, contact: enContact, mocks: enMocks, terms: enTerms, privacy: enPrivacy, refund: enRefund, blog: enBlog };
-const ar: Content = { site: arSite, contact: arContact, mocks: arMocks, terms: arTerms, privacy: arPrivacy, refund: arRefund, blog: arBlog };
+const en: Content = { site: enSite, contact: enContact, mocks: enMocks, terms: enTerms, privacy: enPrivacy, refund: enRefund, blog: enBlog, faq: enFaq };
+const ar: Content = { site: arSite, contact: arContact, mocks: arMocks, terms: arTerms, privacy: arPrivacy, refund: arRefund, blog: arBlog, faq: arFaq };
 
 export const CONTENT: Record<Lang, Content> = { en, ar };

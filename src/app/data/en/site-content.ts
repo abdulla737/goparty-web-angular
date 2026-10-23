@@ -514,6 +514,7 @@ export const FOOTER = {
       heading: 'Support',
       links: [
         { label: 'Help Center', href: LINKS.helpCenter },
+        { label: 'FAQs', href: LINKS.faq },
         { label: 'Safety & Trust', href: '/#why-goparty' },
         { label: 'Terms of Service', href: LINKS.terms },
         { label: 'Privacy Policy', href: LINKS.privacy },
